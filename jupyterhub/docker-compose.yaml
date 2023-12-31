@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  hub:
+    build:
+      context: ./hub
+      dockerfile: Dockerfile
+      args:
+        JUPYTERHUB_VERSION: latest
+    image: jupyterhub
+    container_name: jupyterhub
+    environment:
+      DOCKER_NOTEBOOK_DIR: /home/jovyan
+    ports: 
+      - 8888:8000
+    volumes:
+      - ./hub/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+      - /etc/shadow:/etc/shadow:ro
+    networks:
+      - jupyter-network
+
+networks:
+  jupyter-network:
+    name: jupyter-network

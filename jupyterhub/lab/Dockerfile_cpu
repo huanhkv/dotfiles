@@ -1,0 +1,9 @@
+FROM jupyter/base-notebook
+
+# RUN sudo apt-get update && apt-get install ffmpeg libsm6 libxext6 -y
+
+ADD ./requirements_cpu.txt /srv/custom_notebook/requirements.txt
+
+RUN pip install --upgrade pip 
+
+RUN pip install -r /srv/custom_notebook/requirements.txt --no-cache-dir 
