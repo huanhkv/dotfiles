@@ -1,9 +1,66 @@
-FROM jupyter/base-notebook
+FROM quay.io/jupyter/docker-stacks-foundation:latest
 
-# RUN sudo apt-get update && apt-get install ffmpeg libsm6 libxext6 -y
+USER root
 
-ADD ./requirements_cpu.txt /srv/custom_notebook/requirements.txt
+RUN apt update && apt install ffmpeg libsm6 libxext6 curl gnupg neovim -y
 
-RUN pip install --upgrade pip 
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt update -y && apt-get install google-cloud-sdk -y
 
-RUN pip install -r /srv/custom_notebook/requirements.txt --no-cache-dir 
+USER jovyan
+
+RUN pip install --upgrade pip
+
+RUN conda install cmake=3.29.6
+
+# Install
+RUN pip install \
+    tqdm==4.66.4 \
+    requests==2.32.3 \
+    easydict==1.13 \
+    prettytable==3.10.0
+
+RUN pip install \
+    numpy==1.26.4 \
+    pandas==2.2.2 \
+    polars==0.20.31
+
+RUN pip install \
+    matplotlib==3.9.0 \
+    plotly==5.22.0 \
+    seaborn==0.13.2
+
+RUN pip install \
+    Pillow==10.3.0 \
+    opencv-python==4.10.0.84 \
+    scikit-image==0.24.0 \
+    imutils==0.5.4
+
+RUN pip install \
+    scikit-learn==1.5.0 \
+    optuna==3.6.1 \
+    shap==0.45.1
+
+# Install Boosting models
+RUN pip install \
+    xgboost==2.1.0 \
+    lightgbm==4.4.0 \
+    catboost==1.2.5
+
+# Install Tensorflow
+RUN pip install tensorflow==2.15.1
+
+# Install PyTorch
+RUN pip install \
+        torch==2.3.1 \
+        torchaudio==2.3.1 \
+        torchvision==0.18.1
+
+RUN pip install \
+    efficientnet==1.1.1
+
+# Install ONNX
+RUN pip install \
+    onnx==1.16.1 \
+    onnxruntime==1.18.0 \
+    tf2onnx==1.16.1 \
+    skl2onnx==1.17.0
