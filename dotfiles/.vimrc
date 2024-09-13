@@ -44,24 +44,28 @@ set autoindent
 set smarttab
 set mouse=a
 
-" set noswapfile
+set noswapfile
 set backupcopy=yes
+
+set encoding=UTF-8
+
+" Plugins
+"" Add Plugins
+source $HOME/.vim/plugins/plugins.vim
+
+" " Map keys
+source $HOME/.vim/maps.vim
 
 " Theme/Color
 syntax on
 syntax enable
-colorscheme gruvbox
 set background=dark
 set t_Co=256
 
-" Plugins
-source $HOME/.config/nvim/plugins/plugins.vim
-source $HOME/.config/nvim/plugins/completion-nvim.rc.vim
-source $HOME/.config/nvim/plugins/minimap.rc.vim
-source $HOME/.config/nvim/plugins/airline.rc.vim
-source $HOME/.config/nvim/plugins/nerdtree.rc.vim
-
-:runtime $HOME/,config/nvim/plugins/*.rc.vim
-
-" Map
-source $HOME/.config/nvim/maps.vim
+colorscheme gruvbox
+" colorscheme poimandres
+" colorscheme tokyonight
+" colorscheme tokyonight-night
+" colorscheme tokyonight-storm
+" colorscheme tokyonight-day
+" colorscheme tokyonight-moon
