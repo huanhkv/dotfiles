@@ -9,9 +9,9 @@ Plug 'liuchengxu/vim-which-key'
 
 " GUI PLUGINS ------------------------------------------------------------ {{{
 
-" Theme
-Plug 'olivercederborg/poimandres.nvim'
-Plug 'folke/tokyonight.nvim'
+" " Theme
+" Plug 'olivercederborg/poimandres.nvim'
+" Plug 'jdkanani/vim-material-theme'
 
 " Status bar - Tab bar
 Plug 'vim-airline/vim-airline'
@@ -35,7 +35,11 @@ Plug 'cohama/lexima.vim'
 
 " LSP
 Plug 'prabirshrestha/vim-lsp'
-" Plug 'mattn/vim-lsp-settings'
+Plug 'mattn/vim-lsp-settings'
+
+" Auto complete
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
 " }}}
 

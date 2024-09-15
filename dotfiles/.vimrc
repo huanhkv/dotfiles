@@ -47,25 +47,19 @@ set mouse=a
 set noswapfile
 set backupcopy=yes
 
+set t_Co=256
 set encoding=UTF-8
 
 " Plugins
 "" Add Plugins
 source $HOME/.vim/plugins/plugins.vim
 
-" " Map keys
+" Map keys
 source $HOME/.vim/maps.vim
 
 " Theme/Color
 syntax on
 syntax enable
 set background=dark
-set t_Co=256
 
 colorscheme gruvbox
-" colorscheme poimandres
-" colorscheme tokyonight
-" colorscheme tokyonight-night
-" colorscheme tokyonight-storm
-" colorscheme tokyonight-day
-" colorscheme tokyonight-moon
