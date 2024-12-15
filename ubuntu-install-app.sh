@@ -30,17 +30,15 @@ else
 fi
 
 echo "================================= TMUX ================================="
+# Install TMUX
 sudo apt install -y tmux
 
-# Install Tmux Theme
-TMUX_POWER_THEME="$HOME/.config/tmux/tmux-power"
-if [ -d "$TMUX_POWER_THEME" ];
-then
-    echo "$TMUX_POWER_THEME is existed."
-else
-    git clone https://github.com/wfxr/tmux-power.git $TMUX_POWER_THEME
-    echo 'run-shell "$HOME/.config/tmux/tmux-power/tmux-power.tmux"' >> $HOME/.tmux.conf
-fi
+# Install TMUX Pluggin Manager
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+# Add plugins
+echo "Copy TMUX config to $HOME"
+cp -r dotfiles/.tmux.conf $HOME
 
 echo "================================= VIM =================================="
 # Install NeoVim
@@ -79,8 +77,11 @@ sudo install lazygit /usr/local/bin
 echo "==================================== LAST NOTE ====================================="
 echo "|| Enviroment setup is Done.                                                      ||"
 echo "||                                                                                ||"
+echo "|| You need to run below command to update all plugins installed before use TMUX  ||"
+echo "||                                                                                ||"
+echo "||        Open TMUX -> prefix + I                                                 ||"
+echo "||                                                                                ||"
 echo "|| You need to run below command to update all plugins installed before use NeoVim||"
 echo "||                                                                                ||"
 echo "||        nvim +PlugInstall                                                       ||"
-echo "||                                                                                ||"
 echo "==================================== LAST NOTE ====================================="
