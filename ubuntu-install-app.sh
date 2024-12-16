@@ -66,7 +66,7 @@ cp -r dotfiles/.vim $HOME/.vim
 echo "============================= OTHER TOOLs =============================="
 
 # Install Network tools
-sudo apt install -y net-tools traceroute
+sudo apt install -y iputils-ping net-tools traceroute telnet
 
 # Install lazygit: https://github.com/jesseduffield/lazygit
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
