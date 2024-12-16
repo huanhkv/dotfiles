@@ -5,7 +5,7 @@ set -e
 
 echo "============================== BASE TOOLS =============================="
 sudo apt -y install curl fonts-powerline tree htop
-# sudo apt install -y ibus-unikey 
+# sudo apt install -y ibus-unikey
 
 # echo "================================ SHELL ================================="
 # sudo apt -y install zsh
@@ -64,6 +64,9 @@ cp -r dotfiles/.vimrc $HOME
 cp -r dotfiles/.vim $HOME/.vim
 
 echo "============================= OTHER TOOLs =============================="
+
+# Install Network tools
+sudo apt install -y net-tools traceroute
 
 # Install lazygit: https://github.com/jesseduffield/lazygit
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
