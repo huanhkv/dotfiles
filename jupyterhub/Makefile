@@ -1,15 +1,24 @@
-.PHONY: build
-build:
-	docker build -t jupyter-cpu -f lab/Dockerfile lab/.
+.PHONY: build-cpu build-gpu run clean deep-clean test
 
-.PHONY: run
+VOLUME_MAC="/Volumes/shared"
+VOLUME_LIMUX="/mnt/shared"
+
+build-cpu:
+	docker build -t jupyter-cpu -f lab/Dockerfile_cpu lab/.
+
+build-gpu:
+	docker build -t jupyter-gpu -f lab/Dockerfile_gpu lab/.
+
 run:
-	docker-compose up
+		if [ "$(shell uname -s)" == "Darwin" ]; \
+		then \
+			LOCAL_VOLUME=$(VOLUME_MAC) docker-compose up; \
+		else \
+			LOCAL_VOLUME=$(VOLUME_LIMUX) docker-compose up; \
+		fi
 
-.PHONY: clean
 clean:
 	docker-compose down -v
 
-.PHONY: deep-clean
 deep-clean:
 	docker rmi -f jupyter-cpu

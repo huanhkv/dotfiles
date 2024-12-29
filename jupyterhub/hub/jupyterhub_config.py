@@ -1531,7 +1531,7 @@ c = get_config()  #noqa
 
 
 # =============================================================================
-# My Config 
+# My Config
 # =============================================================================
 
 import os
@@ -1541,26 +1541,32 @@ from dockerspawner import DockerSpawner
 num_cpu = os.cpu_count()
 num_mem = int(os.popen('free -g --si').readlines()[1].split()[1])
 
-max_num_cpu = num_cpu#  // 2
-max_num_mem = num_mem#  // 2
+max_num_cpu = num_cpu  # // 2
+max_num_mem = num_mem  # // 2
 
 list_choose_mem = [2**i for i in range(1, int(math.log2(max_num_mem))+1)]
 list_choose_cpu = [2**i for i in range(1, int(math.log2(max_num_cpu))+1)]
 
-class DemoFormSpawner(DockerSpawner):
+
+class FormDockerSpawner(DockerSpawner):
     def _options_form_default(self):
         html_form = f"""
         <div style="text-align: center; width: 100%">
             <div>Total CPU: {num_cpu} cores</div>
             <div>Total RAM: {num_mem}GB</div>
+            <div>Shared folder: {os.environ['LOCAL_VOLUME']}</div>
         </div>
         <div class="my-custom-row">
             <div class="my-custom-group-btn-label">Compute Platform</div>
             <div class="my-custom-group-btn">
                 <input class="my-custom-d-none" type="radio" id="cpu" name="stack" value="jupyter-cpu" checked>
                 <label for="cpu" class="my-custom-btn my-custom-btn-active">CPU</label>
-                <input class="my-custom-d-none" type="radio" id="gpu" name="stack" value="jupyter/base-notebook">
+                <input class="my-custom-d-none" type="radio" id="gpu" name="stack" value="jupyter-gpu">
                 <label for="gpu" class="my-custom-btn my-custom-btn-inactive">GPU</label>
+                <input class="my-custom-d-none" type="radio" id="base" name="stack" value="quay.io/jupyter/base-notebook:2024-12-29">
+                <label for="base" class="my-custom-btn my-custom-btn-inactive">Base</label>
+                <input class="my-custom-d-none" type="radio" id="foundation" name="stack" value="quay.io/jupyter/docker-stacks-foundation:2024-12-29">
+                <label for="foundation" class="my-custom-btn my-custom-btn-inactive">Foundation</label>
             </div>
         </div>
         <div class="my-custom-row">
@@ -1669,40 +1675,36 @@ class DemoFormSpawner(DockerSpawner):
         options['cpu_limit'] = formdata['cpu_limit']
 
         self.image = options['stack'][0]
+        # c.DockerSpawner.cpu_guarantee
+        # c.DockerSpawner.mem_guarantee
         self.mem_limit = options['mem_limit'][0]
         self.cpu_limit = float(options['cpu_limit'][0])
-
-        # print("SPAWN: " + container_image + " IMAGE" )
 
         return options
 
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # JupyterHub
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
-c.JupyterHub.authenticator_class = 'jupyterhub.auth.PAMAuthenticator'
+# c.JupyterHub.authenticator_class = 'jupyterhub.auth.PAMAuthenticator'
+c.JupyterHub.authenticator_class = 'jupyterhub.auth.DummyAuthenticator'
 # c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
-c.JupyterHub.spawner_class = DemoFormSpawner
+c.JupyterHub.spawner_class = FormDockerSpawner
 
 c.JupyterHub.hub_ip = 'jupyterhub'
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Docker Spawner
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 c.DockerSpawner.network_name = "jupyter-network"
 
 # Image
-# c.DockerSpawner.allowed_images = [] 
-# c.DockerSpawner.image = 'jupyter-cpu'
+# c.DockerSpawner.allowed_images = []
 
 # Resource
-# c.DockerSpawner.cpu_guarantee
-# c.DockerSpawner.cpu_limit
-# c.DockerSpawner.mem_guarantee
-# c.DockerSpawner.mem_limit
-# 
+
 c.DockerSpawner.debug = True
 c.DockerSpawner.remove = True
 # c.DockerSpawner.docker
@@ -1716,15 +1718,15 @@ c.DockerSpawner.remove = True
 # it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
 # user `jovyan`, and set the notebook directory to `/home/jovyan/work`.
 # We follow the same convention.
-notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan/'
-print(notebook_dir)
+notebook_dir = '/home/jovyan/'
 c.DockerSpawner.notebook_dir = notebook_dir
 
 # Mount the real user's Docker volume on the host to the notebook user's
 # notebook directory in the container
-c.DockerSpawner.volumes = { 
+c.DockerSpawner.volumes = {
     'jupyterhub-user-{username}': notebook_dir,
-    "/mnt/shared": os.path.join(notebook_dir, "shared")
+    os.environ['LOCAL_VOLUME']: os.path.join(notebook_dir, "shared")
+    # /mnt/shared
 }
 
 # c.DockerSpawner.volume_driver

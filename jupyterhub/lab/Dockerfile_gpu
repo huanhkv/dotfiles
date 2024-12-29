@@ -1,12 +1,14 @@
-FROM quay.io/jupyter/docker-stacks-foundation:latest
+# FROM quay.io/jupyter/docker-stacks-foundation:latest
+FROM quay.io/jupyter/base-notebook:2024-12-29
 
 USER root
 
-RUN apt update && apt install ffmpeg libsm6 libxext6 curl gnupg neovim -y
+RUN apt update && apt install apt-transport-https ca-certificates curl gnupg ffmpeg libsm6 libxext6 vim neovim htop -y
 
-RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt update -y && apt-get install google-cloud-sdk -y
-
-USER jovyan
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && \
+    apt update -y && \
+    apt install google-cloud-cli-anthoscli -y
 
 RUN pip install --upgrade pip
 
@@ -14,34 +16,24 @@ RUN conda install cmake=3.29.6
 
 # Install
 RUN pip install \
+    pyyaml==6.0.2 \
     tqdm==4.66.4 \
     requests==2.32.3 \
     easydict==1.13 \
-    prettytable==3.10.0
-
-RUN pip install \
+    prettytable==3.10.0 \
     numpy==1.26.4 \
     pandas==2.2.2 \
     polars==0.20.31
-
-RUN pip install \
     matplotlib==3.9.0 \
     plotly==5.22.0 \
-    seaborn==0.13.2
-
-RUN pip install \
+    seaborn==0.13.2 \
     Pillow==10.3.0 \
     opencv-python==4.10.0.84 \
     scikit-image==0.24.0 \
-    imutils==0.5.4
-
-RUN pip install \
+    imutils==0.5.4 \
     scikit-learn==1.5.0 \
     optuna==3.6.1 \
-    shap==0.45.1
-
-# Install Boosting models
-RUN pip install \
+    shap==0.45.1 \
     xgboost==2.1.0 \
     lightgbm==4.4.0 \
     catboost==1.2.5
@@ -67,3 +59,5 @@ RUN pip install \
     skl2onnx==1.17.0
 
 # --extra-index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-cuda-12/pypi/simple/
+
+USER jovyan

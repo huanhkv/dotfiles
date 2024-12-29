@@ -6,13 +6,14 @@ services:
       context: ./hub
       dockerfile: Dockerfile
       args:
-        JUPYTERHUB_VERSION: latest
+        JUPYTERHUB_VERSION: 5.2 # latest
     image: jupyterhub
     container_name: jupyterhub
+    # command: jupyterhub -f /srv/jupyterhub/jupyterhub_config.py --debug
     environment:
-      DOCKER_NOTEBOOK_DIR: /home/jovyan
+      - LOCAL_VOLUME=${LOCAL_VOLUME}
     ports: 
-      - 8888:8000
+      - 8000:8000
     volumes:
       - ./hub/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
