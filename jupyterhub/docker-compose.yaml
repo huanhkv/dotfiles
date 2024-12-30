@@ -20,9 +20,33 @@ services:
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
       - /etc/shadow:/etc/shadow:ro
+    depends_on: 
+      db:
+        condition: service_healthy
     networks:
-      - jupyter-network
+      - jupyterhub-network
+  db:
+    image: mysql:9.1
+    container_name: jupyterhub_mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=jupyterhub_db
+    ports: 
+      - 33060:33060
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - jupyterhub-network
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 2s
+      retries: 2
 
 networks:
-  jupyter-network:
-    name: jupyter-network
+  jupyterhub-network:
+    name: jupyterhub-network
+
+volumes:
+    mysql-data:

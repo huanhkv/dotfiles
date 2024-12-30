@@ -1,4 +1,4 @@
-.PHONY: build-cpu build-gpu run clean deep-clean test
+.PHONY: build-cpu build-gpu run clean deep-clean test run-jupyterlab
 
 VOLUME_MAC="/Volumes/shared"
 VOLUME_LIMUX="/mnt/shared"
@@ -22,3 +22,11 @@ clean:
 
 deep-clean:
 	docker rmi -f jupyter-cpu
+
+run-jupyterlab:
+	docker run \
+	-dp 8888:8888 \
+	-v $(shell pwd)/../../../:/lab \
+	-v $(VOLUME_MAC):/home/jovyan/shared \
+	--name jupyterlab \
+	jupyter-cpu

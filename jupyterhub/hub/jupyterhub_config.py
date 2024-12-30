@@ -1,3 +1,8 @@
+import os
+import math
+
+import nativeauthenticator
+from dockerspawner import DockerSpawner
 
 # Configuration file for jupyterhub.
 
@@ -1534,9 +1539,6 @@ c = get_config()  #noqa
 # My Config
 # =============================================================================
 
-import os
-import math
-from dockerspawner import DockerSpawner
 
 num_cpu = os.cpu_count()
 num_mem = int(os.popen('free -g --si').readlines()[1].split()[1])
@@ -1689,16 +1691,31 @@ class FormDockerSpawner(DockerSpawner):
 
 # c.JupyterHub.authenticator_class = 'jupyterhub.auth.PAMAuthenticator'
 c.JupyterHub.authenticator_class = 'jupyterhub.auth.DummyAuthenticator'
+# c.JupyterHub.authenticator_class = 'native'
+
 # c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 c.JupyterHub.spawner_class = FormDockerSpawner
 
 c.JupyterHub.hub_ip = 'jupyterhub'
 
+c.JupyterHub.db_url = "mysql+mysqldb://root:root@db:3306/jupyterhub_db"
+
+c.JupyterHub.template_paths = [
+    f"{os.path.dirname(nativeauthenticator.__file__)}/templates/"
+]
+
+# ------------------------------------------------------------------------------
+# Authenticator
+# ------------------------------------------------------------------------------
+
+c.Authenticator.admin_users = {'admin'}
+# c.Authenticator.request_otp = True
+
 # ------------------------------------------------------------------------------
 # Docker Spawner
 # ------------------------------------------------------------------------------
 
-c.DockerSpawner.network_name = "jupyter-network"
+c.DockerSpawner.network_name = "jupyterhub-network"
 
 # Image
 # c.DockerSpawner.allowed_images = []
