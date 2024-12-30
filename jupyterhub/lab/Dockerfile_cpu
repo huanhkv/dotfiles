@@ -51,4 +51,6 @@ RUN pip install \
     tf2onnx==1.16.1 \
     skl2onnx==1.17.0
 
+RUN mamba install -c conda-forge jupyter-collaboration
+
 USER jovyan
