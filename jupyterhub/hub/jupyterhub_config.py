@@ -1690,8 +1690,8 @@ class FormDockerSpawner(DockerSpawner):
 # ------------------------------------------------------------------------------
 
 # c.JupyterHub.authenticator_class = 'jupyterhub.auth.PAMAuthenticator'
-# c.JupyterHub.authenticator_class = 'jupyterhub.auth.DummyAuthenticator'
-c.JupyterHub.authenticator_class = 'native'
+c.JupyterHub.authenticator_class = 'jupyterhub.auth.DummyAuthenticator'
+# c.JupyterHub.authenticator_class = 'native'
 
 # c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 c.JupyterHub.spawner_class = FormDockerSpawner
