@@ -1,0 +1,8 @@
+theme = dark:tokyonight,light:tokyonight-day
+font-size = 10
+# background-image = "/Users/huan.ho/Downloads/full-image.png"
+background-opacity = 0.8
+background-blur-radius = 10
+macos-titlebar-style = hidden
+quick-terminal-animation-duration = 0
+keybind = global:cmd+grave_accent=toggle_quick_terminal

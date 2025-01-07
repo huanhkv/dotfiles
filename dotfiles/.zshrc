@@ -1,14 +1,14 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.config/.oh-my-zsh"
+# Path to your Oh My Zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
+# load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="agnoster"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -70,7 +70,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -89,14 +89,98 @@ source $ZSH/oh-my-zsh.sh
 # fi
 
 # Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+# export ARCHFLAGS="-arch $(uname -m)"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# Set personal aliases, overriding those provided by Oh My Zsh libs,
+# plugins, and themes. Aliases can be placed here, though Oh My Zsh
+# users are encouraged to define aliases within a top-level file in
+# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
+# - $ZSH_CUSTOM/aliases.zsh
+# - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-fpath+=${ZDOTDIR:-~}/.zsh_functions
+
+# My Aliases BEGIN ====================================================================================================
+
+# Brew mapping
+export PATH=/opt/homebrew/bin:$PATH
+
+# Vim
+alias nv="nvim"
+
+# Minikube
+m="minikube"
+alias m=$m
+alias mi="$m image"
+
+# Kubectl
+# # CLI
+k="kubectl"
+c=" config"
+d=" describe"
+l=" logs"
+g=" get"
+p=" pod"
+u=" use-context"
+# # Cluster
+qa=""
+stage=""
+prod=""
+vpstage=""
+vpprod=""
+# # Alias
+alias k=$k
+
+alias kg=$k$g
+alias kd=$k$d
+alias kl=$k$l
+alias kc=$k$c
+alias ku=$k$c$u
+
+alias kgp=$k$g$p
+alias kdp=$k$d$p
+alias kcgc=$k$c" get-contexts"
+
+alias kuqa=$k$c$u$qa
+alias kustage=$k$c$u$stage
+alias kuprod=$k$c$u$prod
+alias kuvpstage=$k$c$u$vpstage
+alias kuvpprod=$k$c$u$vpprod
+
+# Workbench
+sc_ip=""
+lp_ip=""
+l4_0_ip=""
+l4_1_ip=""
+red_ip=""
+
+## sc
+alias sc="ssh jupyter@"$sc_ip
+
+## lp
+alias lp="ssh jupyter@"$lp_ip
+alias lp-huanhkv="ssh huanhkv@"$lp_ip
+
+## L4
+alias l40="ssh jupyter@"$l4_0_ip
+alias l40-huanhkv="ssh huanhkv@"$l4_0_ip
+
+## L4-1
+alias l41="ssh jupyter@"$l4_1_ip
+alias l41-huanhkv="ssh huanhkv@"$l4_1_ip
+
+alias red="ssh jupyter@"$red_ip
+alias red-huanhkv="ssh huanhkv@"$red_ip
+
+# My Aliases END ====================================================================================================
+
+export GPG_TTY=$(tty)
+alias gal="gcloud auth login"
+
+k8s_master_1_port="110"
+k8s_worker_1_port="111"
+alias km1="ssh huanhkv@localhost -p "$k8s_master_1_port
+alias kw1="ssh huanhkv@localhost -p "$k8s_worker_1_port

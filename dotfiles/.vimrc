@@ -63,3 +63,6 @@ syntax enable
 set background=dark
 
 colorscheme gruvbox
+" set termguicolors
+" highlight Normal ctermbg=NONE guibg=NONE
+" highlight NonText ctermbg=NONE guibg=NONE
