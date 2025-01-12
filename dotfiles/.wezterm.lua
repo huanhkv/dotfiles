@@ -1,3 +1,16 @@
+-- Function definitions
+local function get_all_files_in_folder(folder)
+    local file_paths = {}
+    local p = io.popen('ls -p "' .. folder .. '"') -- Use `dir` for Windows
+    for file in p:lines() do
+        if file:sub(-1) ~= "/" then
+            table.insert(file_paths, folder .. "/" .. file)
+        end
+    end
+    p:close()
+    return file_paths
+end
+
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 local mux = wezterm.mux
@@ -23,39 +36,29 @@ config.color_scheme = "Poimandres"
 config.hide_tab_bar_if_only_one_tab = true
 config.harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }
 
-config.font_size = 11
-config.background = {
-    {
-        source = {
-            -- File = "/Users/huan.ho/Downloads/wallhaven-347368.jpg",
-            File = "/Users/huan.ho/Downloads/ZFoDUae.jpeg",
-        },
-        hsb = { brightness = 0.04 },
-    },
-}
+background_image = get_all_files_in_folder(os.getenv("HOME") .. "/.config/backgrounds")[2]
+
 if is_windows then
 	config.font_size = 8.5
 	config.default_prog = { "wsl", "--cd", "~" }
 	config.background = {
 		{
 			source = {
-				File = "C:/Users/Yara/Pictures/Wallpaper/study club.jpeg",
+				File = background_image,
 			},
 			hsb = { brightness = 0.02 },
 		},
 	}
-end
-
-if is_linux then
-	config.font_size = 13
-	config.background = {
-		{
-			source = {
-				File = "/home/miku4j/Pictures/arius.png",
-			},
-			hsb = { brightness = 0.015 },
-		},
-	}
+else
+    config.font_size = 11
+    config.background = {
+        {
+            source = {
+                File = background_image,
+            },
+            hsb = { brightness = 0.04 },
+        },
+    }
 end
 
 -- wezterm.on("gui-startup", function(cmd)
