@@ -38,7 +38,7 @@ export PATH=/opt/homebrew/bin:$PATH
 
 echo "================================= Base Tools ================================="
 
-brew install git curl
+brew install git curl tree htop
 
 echo "================================= TMUX ================================="
 # Install TMUX
@@ -90,3 +90,5 @@ echo "============================= OTHER TOOLs =============================="
 # sudo usermod -aG docker $USER
 # newgrp docker
 # docker ps
+
+echo "==================================== DONE ====================================="

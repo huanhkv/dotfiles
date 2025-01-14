@@ -3,8 +3,37 @@
 # Set the -e option
 set -e
 
+# Function definition
+backup_path() {
+
+    if [ -d $1 ] || [ -f $1 ]; then
+        local src=$1
+        local count=$(ls -a $backup_folder | grep -v / | grep "$(basename $src)-*" | wc -l)
+        local dest="$backup_folder/$(basename $src)-$((count))"
+
+        echo "$src exists! Backup to $dest"
+        sudo mv $src $dest
+        echo "Backup completed!"
+    else
+        echo "$1 does not exist!"
+    fi
+}
+
+# Backup folder
+backup_folder=~/dotfiles-bak
+
+if [ ! -d $backup_folder ]; then
+    echo "$backup_folder does not exist! Create it!"
+    mkdir -p $backup_folder
+fi
+
+backup_folder=$(realpath $backup_folder)
+echo "Backup folder: $backup_folder"
+
+
 echo "============================== BASE TOOLS =============================="
-sudo apt -y install curl fonts-powerline tree htop
+
+sudo apt -y install curl git fonts-powerline tree htop
 # sudo apt install -y ibus-unikey
 
 # echo "================================ SHELL ================================="
@@ -34,46 +63,53 @@ echo "================================= TMUX ================================="
 # Install TMUX
 sudo apt install -y tmux
 
-# Install TMUX Pluggin Manager
-if [ -d ~/.tmux/plugins/tpm ];
-then
-	if [ -d ~/.tmux/plugins/tpm-bak ];
-	then
-		rm -rf ~/.tmux/plugins/tpm-bak
-	fi
-	mv ~/.tmux/plugins/tpm ~/.tmux/plugins/tpm-bak
-fi
+# Backup TMUX config
+echo "Backup TMUX config"
+backup_path ~/.tmux
+backup_path ~/.tmux.conf
 
+# Install TMUX Pluggin Manager
+echo "Install TMUX Pluggin Manager (TPM)"
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 # Add plugins
 echo "Copy TMUX config to $HOME"
 cp -r dotfiles/.tmux.conf $HOME
 
+# Install TMUX plugins
+echo "Install TMUX plugins"
+~/.tmux/plugins/tpm/bin/install_plugins
+
 echo "================================= VIM =================================="
 # Install Vim
 sudo apt install -y vim xclip
+
+# Backup Vim config
+echo "Backup Vim config"
+backup_path ~/.vim
+backup_path ~/.vimrc
 
 # Install Vim-Plug
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
 # Add plugins
-echo "Copy vim config to $HOME/.config/vim"
+echo "Copy vim config to $HOME"
 cp -r dotfiles/.vimrc $HOME
 cp -r dotfiles/.vim $HOME/.vim
+vim +PlugInstall +qall
 
 echo "============================= OTHER TOOLs =============================="
 
 # Install Network tools
-sudo apt install -y iputils-ping net-tools traceroute telnet
+# sudo apt install -y iputils-ping net-tools traceroute telnet
 
-# Install lazygit: https://github.com/jesseduffield/lazygit
-LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-tar xf lazygit.tar.gz lazygit
-rm lazygit.tar.gz
-sudo install lazygit /usr/local/bin
+# # Install lazygit: https://github.com/jesseduffield/lazygit
+# LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+# curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+# tar xf lazygit.tar.gz lazygit
+# rm lazygit.tar.gz
+# sudo install lazygit /usr/local/bin
 
 # # Docker
 # sudo apt install -y docker.io
@@ -83,14 +119,4 @@ sudo install lazygit /usr/local/bin
 # newgrp docker
 # docker ps
 
-echo "==================================== LAST NOTE ====================================="
-echo "|| Enviroment setup is Done.                                                      ||"
-echo "||                                                                                ||"
-echo "|| You need to run below command to update all plugins installed before use TMUX  ||"
-echo "||                                                                                ||"
-echo "||        Open TMUX -> prefix + I                                                 ||"
-echo "||                                                                                ||"
-echo "|| You need to run below command to update all plugins installed before use NeoVim||"
-echo "||                                                                                ||"
-echo "||        nvim +PlugInstall                                                       ||"
-echo "==================================== LAST NOTE ====================================="
+echo "==================================== DONE ====================================="
