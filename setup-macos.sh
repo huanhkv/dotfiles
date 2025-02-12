@@ -42,7 +42,7 @@ brew install git curl tree htop
 
 echo "================================= TMUX ================================="
 # Install TMUX
-# brew install tmux
+brew install tmux
 
 # Backup TMUX config
 echo "Backup TMUX config"
@@ -62,24 +62,54 @@ echo "Install TMUX plugins"
 ~/.tmux/plugins/tpm/bin/install_plugins
 
 echo "================================= VIM =================================="
-# Install Vim
-brew install vim
+echo "Sellect editor:"
+echo "\t1. Vim"
+echo "\t2. Neovim"
 
-# Backup Vim config
-echo "Backup Vim config"
-backup_path ~/.vim
-backup_path ~/.vimrc
+printf "Enter your choice: "
+read editor
 
-# Install Vim-Plug
-echo "Install Vim-Plug"
-sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+while [ ! $editor -eq 1 ] && [ ! $editor -eq 2 ]; do
+    echo "Invalid choice!"
+    printf "Enter your choice again: "
+    read editor
+done
 
-# Add plugins
-echo "Copy vim config to $HOME"
-cp -r dotfiles/.vimrc $HOME
-cp -r dotfiles/.vim $HOME/.vim
-vim +PlugInstall +qall
+if [ $editor -eq 1 ]; then
+
+    echo "Install Vim"
+    brew install vim
+
+    # Backup Vim config
+    echo "Backup Vim config"
+    backup_path ~/.vim
+    backup_path ~/.vimrc
+    
+    # Install Vim-Plug
+    echo "Install Vim-Plug"
+    sh -c 'curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    
+    # Add plugins
+    echo "Copy vim config to $HOME"
+    cp -r dotfiles/.vimrc $HOME
+    cp -r dotfiles/.vim $HOME/.vim
+    vim +PlugInstall +qall
+
+else
+
+    echo "Install Neovim"
+    brew install neovim
+
+    # Backup NeoVim config
+    echo "Backup NeoVim config"
+    backup_path ~/.config/nvim
+    
+    # Add plugins
+    echo "Copy vim config to $HOME"
+    cp -r dotfiles/.config/nvim $HOME/.config/nvim
+
+fi
 
 echo "============================= OTHER TOOLs =============================="
 
