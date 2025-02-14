@@ -34,7 +34,7 @@ echo "Backup folder: $backup_folder"
 echo "============================== BASE TOOLS =============================="
 
 sudo apt -y install curl git fonts-powerline tree htop
-# sudo apt install -y ibus-unikey
+sudo apt install -y ibus-unikey
 
 # echo "================================ SHELL ================================="
 # sudo apt -y install zsh
@@ -82,22 +82,55 @@ echo "Install TMUX plugins"
 
 echo "================================= VIM =================================="
 # Install Vim
-sudo apt install -y vim xclip
+sudo apt install -y xclip
 
-# Backup Vim config
-echo "Backup Vim config"
-backup_path ~/.vim
-backup_path ~/.vimrc
+echo "Sellect editor:"
+echo "\t1. Vim"
+echo "\t2. Neovim"
 
-# Install Vim-Plug
-sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+printf "Enter your choice: "
+read editor
 
-# Add plugins
-echo "Copy vim config to $HOME"
-cp -r dotfiles/.vimrc $HOME
-cp -r dotfiles/.vim $HOME/.vim
-vim +PlugInstall +qall
+while [ ! $editor -eq 1 ] && [ ! $editor -eq 2 ]; do
+    echo "Invalid choice!"
+    printf "Enter your choice again: "
+    read editor
+done
+
+if [ $editor -eq 1 ]; then
+
+    echo "Install Vim"
+    sudo apt install -y vim
+
+    # Backup Vim config
+    echo "Backup Vim config"
+    backup_path ~/.vim
+    backup_path ~/.vimrc
+
+    # Install Vim-Plug
+    echo "Install Vim-Plug"
+    sh -c 'curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+    # Add plugins
+    echo "Copy vim config to $HOME"
+    cp -r dotfiles/.vimrc ~/
+    cp -r dotfiles/.vim ~/.vim
+    vim +PlugInstall +qall
+
+else
+
+    echo "Install Neovim"
+    # sudo apt install -y neovim
+
+    # Backup NeoVim config
+    echo "Backup NeoVim config"
+    backup_path ~/.config/nvim
+
+    # Add plugins
+    echo "Copy vim config to $HOME"
+    cp -r dotfiles/.config/nvim ~/.config/nvim
+fi
 
 echo "============================= OTHER TOOLs =============================="
 
