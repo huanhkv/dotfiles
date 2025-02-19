@@ -22,6 +22,7 @@ vim.opt.cursorline = true
 vim.opt.cursorcolumn = true
 vim.opt.relativenumber = true
 vim.opt.termguicolors = true
+vim.opt.colorcolumn = "80"
 
 -- Indentation & Tabs
 vim.opt.shiftwidth = 4
