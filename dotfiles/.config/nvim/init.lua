@@ -32,6 +32,15 @@ vim.opt.expandtab = true
 vim.opt.autoindent = true
 vim.opt.smarttab = true
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "yaml",
+  callback = function()
+    vim.bo.tabstop = 2
+    vim.bo.shiftwidth = 2
+    vim.bo.expandtab = true
+  end,
+})
+
 -- Search
 vim.opt.incsearch = true
 vim.opt.ignorecase = true

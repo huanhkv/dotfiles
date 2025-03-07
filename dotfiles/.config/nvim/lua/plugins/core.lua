@@ -11,6 +11,7 @@ return {
             local lspconfig = require("lspconfig")
             lspconfig.pyright.setup({})
             lspconfig.clangd.setup({})
+            lspconfig.bashls.setup({})
         end,
     },
 
@@ -77,7 +78,12 @@ return {
             local null_ls = require("null-ls")
             null_ls.setup({
                 sources = {
-                    null_ls.builtins.diagnostics.mypy,
+                    null_ls.builtins.diagnostics.mypy.with({
+                        extra_args = {
+                            "--python-executable",
+                            vim.fn.getcwd() .. "/env/bin/python"
+                        }
+                    }),
                     null_ls.builtins.diagnostics.ruff,
                     null_ls.builtins.formatting.clang_format,
                 },
@@ -118,38 +124,38 @@ return {
 
             vim.keymap.set('n', "<leader>db", ':DapToggleBreakpoint<CR>')
             vim.keymap.set('n', "<leader>dr", ':DapContinue<CR>')
-            -- local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
-            -- dap.configurations.python = {
-            --     {
-            --         type = 'python';
-            --         request = 'launch';
-            --         name = "Launch file";
-            --         program = "${file}";
-            --         pythonPath = function()
-            --             return path -- '/usr/bin/python'
-            --         end;
-            --     },
-            -- }
-            -- dap.configurations.cpp = {
-            --     {
-            --         type = 'codelldb';
-            --         request = 'launch';
-            --         name = "Launch file";
-            --         program = function()
-            --             return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-            --         end;
-            --         stopOnEntry = true;
-            --         args = {};
-            --         cwd = '${workspaceFolder}';
-            --         env = function()
-            --             local variables = {}
-            --             for k, v in pairs(vim.fn.environ()) do
-            --                 table.insert(variables, string.format("%s=%s", k, v))
-            --             end
-            --             return variables
-            --         end;
-            --     },
-            -- }
+            local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
+            dap.configurations.python = {
+                {
+                    type = 'python';
+                    request = 'launch';
+                    name = "Launch file";
+                    program = "${file}";
+                    pythonPath = function()
+                        return path -- '/usr/bin/python'
+                    end;
+                },
+            }
+            dap.configurations.cpp = {
+                {
+                    type = 'codelldb';
+                    request = 'launch';
+                    name = "Launch file";
+                    program = function()
+                        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                    end;
+                    stopOnEntry = true;
+                    args = {};
+                    cwd = '${workspaceFolder}';
+                    env = function()
+                        local variables = {}
+                        for k, v in pairs(vim.fn.environ()) do
+                            table.insert(variables, string.format("%s=%s", k, v))
+                        end
+                        return variables
+                    end;
+                },
+            }
         end,
 
     },
