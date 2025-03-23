@@ -47,15 +47,19 @@ return {
     -- Floaterm
     {
         'voldikss/vim-floaterm',
+        lazy = false,
         config = function()
-            -- vim.g.floaterm_keymap_new = '<F2>'
-            -- vim.cmd([[let g:floaterm_keymap_new = '<F2>']])
-            -- vim.cmd([[let g:floaterm_keymap_toggle = '<F3>']])
-            -- vim.cmd("let g:floaterm_keymap_prev = '<F5>'")
-            -- vim.cmd("let g:floaterm_keymap_next = '<F6>'")
-            -- vim.cmd("let g:floaterm_keymap_kill = '<F12>'")
-            -- " noremap <F2> :FloatermNew --height=0.9 --width=0.9 --name='lazygit' echo %:p:h<CR>
-            -- noremap <F4> :FloatermNew --height=0.9 --width=0.9 --name='lazygit' lazygit<CR>
+            vim.keymap.set("n", "<F2>", ":FloatermNew<CR>", { silent = true })
+            vim.keymap.set("t", "<F2>", "<C-\\><C-n>:FloatermNew<CR>", { silent = true })
+            vim.keymap.set("n", "<F3>", ":FloatermToggle<CR>", { silent = true })
+            vim.keymap.set("t", "<F3>", "<C-\\><C-n>:FloatermToggle<CR>", { silent = true })
+            vim.keymap.set("n", "<F5>", ":FloatermPrev<CR>", { silent = true })
+            vim.keymap.set("t", "<F5>", "<C-\\><C-n>:FloatermPrev<CR>", { silent = true })
+            vim.keymap.set("n", "<F6>", ":FloatermNext<CR>", { silent = true })
+            vim.keymap.set("t", "<F6>", "<C-\\><C-n>:FloatermNext<CR>", { silent = true })
+            vim.keymap.set("n", "<F12>", ":FloatermKill<CR>", { silent = true })
+            vim.keymap.set("t", "<F12>", "<C-\\><C-n>:FloatermKill<CR>", { silent = true })
+            vim.keymap.set("n", "<F4>", ":FloatermNew --height=0.9 --width=0.9 --name='lazygit' lazygit<CR>", { silent = true })
         end,
     },
 
