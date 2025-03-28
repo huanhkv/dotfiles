@@ -124,6 +124,20 @@ fi
 
 echo "============================= OTHER TOOLs =============================="
 
+echo "Install Window manager tools"
+# Install
+brew install --cask nikitabobko/tap/aerospace
+brew tap FelixKratz/formulae
+brew install sketchybar
+brew install borders
+
+# Backup
+backup_path "$HOME/.aerospace.toml" "$backup_folder"
+
+# Add config
+ln -s "$(realpath dotfiles/.aerospace.toml)" "$HOME"
+
+
 # # Docker
 # sudo apt install -y docker.io
 # sudo systemctl enable docker --now
