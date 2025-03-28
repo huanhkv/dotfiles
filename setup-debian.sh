@@ -6,28 +6,39 @@ set -e
 # Function definition
 backup_path() {
 
-    if [ -d $1 ] || [ -f $1 ]; then
-        local src=$1
-        local count=$(ls -a $backup_folder | grep -v / | grep "$(basename $src)-*" | wc -l)
-        local dest="$backup_folder/$(basename $src)-$((count))"
+    # Get parameters
+    src="$1"
+    backup_folder="$2"
+
+    if [ -d "$src" ] || [ -f "$src" ]; then
+
+        count=$(find "$backup_folder" -maxdepth 1 -name "$(basename "$src")-*" | wc -l)
+        dest="$backup_folder/$(basename "$src")-$((count))"
 
         echo "$src exists! Backup to $dest"
-        sudo mv $src $dest
+        if [ -L "$src" ]; then
+            echo "$src is a symlink"
+            sudo ln -s "$(readlink "$src")" "$dest"
+	    sudo rm -rf "$src"
+        else
+            echo "$src is NOT a symlink"
+            sudo mv "$src" "$dest"
+        fi
         echo "Backup completed!"
     else
-        echo "$1 does not exist!"
+        echo "$src does not exist!"
     fi
 }
 
 # Backup folder
-backup_folder=~/dotfiles-bak
+backup_folder=$HOME/dotfiles-bak
 
-if [ ! -d $backup_folder ]; then
+if [ ! -d "$backup_folder" ]; then
     echo "$backup_folder does not exist! Create it!"
-    mkdir -p $backup_folder
+    mkdir -p "$backup_folder"
 fi
 
-backup_folder=$(realpath $backup_folder)
+backup_folder=$(realpath "$backup_folder")
 echo "Backup folder: $backup_folder"
 
 
@@ -65,47 +76,47 @@ sudo apt install -y tmux
 
 # Backup TMUX config
 echo "Backup TMUX config"
-backup_path ~/.tmux
-backup_path ~/.tmux.conf
+backup_path "$HOME/.tmux" "$backup_folder"
+backup_path "$HOME/.tmux.conf" "$backup_folder"
 
 # Install TMUX Pluggin Manager
 echo "Install TMUX Pluggin Manager (TPM)"
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
 
 # Add plugins
 echo "Copy TMUX config to $HOME"
-cp -r dotfiles/.tmux.conf $HOME
+ln -s "$(realpath dotfiles/.tmux.conf)" "$HOME"
 
 # Install TMUX plugins
 echo "Install TMUX plugins"
-~/.tmux/plugins/tpm/bin/install_plugins
+"$HOME/.tmux/plugins/tpm/bin/install_plugins"
 
 echo "================================= VIM =================================="
 # Install Vim
 sudo apt install -y xclip
 
 echo "Sellect editor:"
-echo "\t1. Vim"
-echo "\t2. Neovim"
+printf "\t1. Vim\n"
+printf "\t2. Neovim"
 
-printf "Enter your choice: "
-read editor
+echo "Enter your choice: "
+read -r editor
 
-while [ ! $editor -eq 1 ] && [ ! $editor -eq 2 ]; do
+while [ ! "$editor" -eq 1 ] && [ ! "$editor" -eq 2 ]; do
     echo "Invalid choice!"
     printf "Enter your choice again: "
-    read editor
+    read -r editor
 done
 
-if [ $editor -eq 1 ]; then
+if [ "$editor" -eq 1 ]; then
 
     echo "Install Vim"
     sudo apt install -y vim
 
     # Backup Vim config
     echo "Backup Vim config"
-    backup_path ~/.vim
-    backup_path ~/.vimrc
+    backup_path "$HOME/.vim" "$backup_folder"
+    backup_path "$HOME/.vimrc" "$backup_folder"
 
     # Install Vim-Plug
     echo "Install Vim-Plug"
@@ -114,8 +125,8 @@ if [ $editor -eq 1 ]; then
 
     # Add plugins
     echo "Copy vim config to $HOME"
-    cp -r dotfiles/.vimrc ~/
-    cp -r dotfiles/.vim ~/.vim
+    ln -s "dotfiles/.vimrc" "$HOME"
+    ln -s "dotfiles/.vim" "$HOME/.vim"
     vim +PlugInstall +qall
 
 else
@@ -125,11 +136,11 @@ else
 
     # Backup NeoVim config
     echo "Backup NeoVim config"
-    backup_path ~/.config/nvim
+    backup_path "$HOME/.config/nvim" "$backup_folder"
 
     # Add plugins
     echo "Copy vim config to $HOME"
-    cp -r dotfiles/.config/nvim ~/.config/nvim
+    ln -s "$(realpath dotfiles/.config/nvim)" "$HOME/.config/nvim"
 fi
 
 echo "============================= OTHER TOOLs =============================="
