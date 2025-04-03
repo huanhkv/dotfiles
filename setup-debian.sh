@@ -139,7 +139,6 @@ else
     backup_path "$HOME/.config/nvim" "$backup_folder"
 
     # Add plugins
-    echo "Copy vim config to $HOME"
     echo "Copy vim config from $(realpath dotfiles/.config/nvim) to $HOME"
 fi
 
