@@ -84,8 +84,8 @@ echo "Install TMUX Pluggin Manager (TPM)"
 git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
 
 # Add plugins
-echo "Copy TMUX config to $HOME"
-ln -s "$(realpath dotfiles/.tmux.conf)" "$HOME"
+echo "Copy TMUX config from $(realpath dotfiles/.tmux.conf) to $HOME"
+ln -s "$(realpath dotfiles/.tmux.conf)" "$HOME/.tmux.conf"
 
 # Install TMUX plugins
 echo "Install TMUX plugins"
@@ -97,9 +97,9 @@ sudo apt install -y xclip
 
 echo "Sellect editor:"
 printf "\t1. Vim\n"
-printf "\t2. Neovim"
+printf "\t2. Neovim\n"
 
-echo "Enter your choice: "
+printf "Enter your choice: "
 read -r editor
 
 while [ ! "$editor" -eq 1 ] && [ ! "$editor" -eq 2 ]; do
@@ -140,7 +140,7 @@ else
 
     # Add plugins
     echo "Copy vim config to $HOME"
-    ln -s "$(realpath dotfiles/.config/nvim)" "$HOME/.config/nvim"
+    echo "Copy vim config from $(realpath dotfiles/.config/nvim) to $HOME"
 fi
 
 echo "============================= OTHER TOOLs =============================="
