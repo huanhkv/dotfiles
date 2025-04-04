@@ -24,6 +24,8 @@ if wezterm.config_builder then
 	config = wezterm.config_builder()
 end
 
+config.window_decorations = "RESIZE"
+
 -- https://github.com/wez/wezterm/discussions/4728
 local is_windows = wezterm.target_triple:find("windows") ~= nil
 local is_linux = wezterm.target_triple:find("linux") ~= nil
@@ -36,7 +38,7 @@ config.color_scheme = "Poimandres"
 config.hide_tab_bar_if_only_one_tab = true
 config.harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }
 
-background_image = get_all_files_in_folder(os.getenv("HOME") .. "/.config/backgrounds")[2]
+background_image = get_all_files_in_folder(os.getenv("HOME") .. "/.config/backgrounds")[6]
 
 if is_windows then
 	config.font_size = 8.5

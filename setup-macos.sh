@@ -50,7 +50,39 @@ echo "Backup folder: $backup_folder"
 # echo "================================= Base Tools ================================="
 # 
 # brew install git curl tree htop
-# 
+#
+echo "================================= Terminal ================================="
+echo "Sellect Terminal:"
+printf "\t1. WezTerm\n"
+printf "\t2. Ghostty\n"
+
+printf "Enter your choice: "
+read -r terminal
+
+while [ ! "$terminal" -eq 1 ] && [ ! "$terminal" -eq 2 ]; do
+    echo "Invalid choice!"
+    printf "Enter your choice again: "
+    read -r terminal
+done
+
+# Install
+if [ "$terminal" -eq 1 ]; then
+    echo "Install WezTerm"
+    terminal="WezTerm"
+elif [ "$terminal" -eq 2 ]; then
+    echo "Install Ghostty"
+    terminal="Ghostty"
+fi
+terminal_lower=$(echo "$terminal" | tr '[:upper:]' '[:lower:]')
+
+# Backup Terminal config
+echo "Backup $terminal config"
+backup_path "$HOME/.config/$terminal_lower" "$backup_folder"
+
+# Add Terminal config
+echo "Copy $terminal config from $(realpath "dotfiles/.config/$terminal_lower") to $HOME/.config/$terminal_lower"
+ln -s "$(realpath "dotfiles/.config/$terminal_lower")" "$HOME/.config/$terminal_lower"
+
 echo "================================= TMUX ================================="
 # # Install TMUX
 # brew install tmux
@@ -65,8 +97,8 @@ echo "Install TMUX Pluggin Manager (TPM)"
 git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
 
 # Add plugins
-echo "Copy TMUX config to $HOME"
-ln -s "$(realpath dotfiles/.tmux.conf)" "$HOME"
+echo "Copy TMUX config from $(realpath dotfiles/.tmux.conf) to $HOME"
+ln -s "$(realpath dotfiles/.tmux.conf)" "$HOME/.tmux.conf"
 
 # Install TMUX plugins
 echo "Install TMUX plugins"
@@ -77,7 +109,7 @@ echo "Sellect editor:"
 printf "\t1. Vim\n"
 printf "\t2. Neovim"
 
-echo "Enter your choice: "
+printf "Enter your choice: "
 read -r editor
 
 while [ ! "$editor" -eq 1 ] && [ ! "$editor" -eq 2 ]; do
@@ -117,7 +149,7 @@ else
     backup_path "$HOME/.config/nvim" "$backup_folder"
     
     # Add plugins
-    echo "Copy vim config to $HOME"
+    echo "Copy vim config from $(realpath dotfiles/.config/nvim) to $HOME"
     ln -s "$(realpath dotfiles/.config/nvim)" "$HOME/.config/nvim"
 
 fi

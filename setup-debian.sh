@@ -140,6 +140,7 @@ else
 
     # Add plugins
     echo "Copy vim config from $(realpath dotfiles/.config/nvim) to $HOME"
+    ln -s "$(realpath dotfiles/.config/nvim)" "$HOME/.config/nvim"
 fi
 
 echo "============================= OTHER TOOLs =============================="
