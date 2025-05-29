@@ -9,7 +9,13 @@ return {
         },
         config = function()
             local lspconfig = require("lspconfig")
-            lspconfig.pyright.setup({})
+            lspconfig.pyright.setup({
+                settings = {
+                    python = {
+                        pythonPath = vim.fn.getcwd() .. "/.venv/bin/python"
+                    }
+                }
+            })
             lspconfig.clangd.setup({})
             lspconfig.bashls.setup({})
 
@@ -89,7 +95,7 @@ return {
                     null_ls.builtins.diagnostics.mypy.with({
                         extra_args = {
                             "--python-executable",
-                            vim.fn.getcwd() .. "/env/bin/python"
+                            vim.fn.getcwd() .. "/.venv/bin/python"
                         }
                     }),
                     null_ls.builtins.diagnostics.ruff,
@@ -132,7 +138,7 @@ return {
 
             vim.keymap.set('n', "<leader>db", ':DapToggleBreakpoint<CR>')
             vim.keymap.set('n', "<leader>dr", ':DapContinue<CR>')
-            local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
+            local path = vim.fn.getcwd() .. "/.venv/bin/python"
             dap.configurations.python = {
                 {
                     type = 'python';
@@ -177,9 +183,37 @@ return {
         },
         ft = "python",
         config = function()
-            local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
+            local path = vim.fn.getcwd() .. "/.venv/bin/python"
             require("dap-python").setup(path)
             vim.keymap.set("n", "<leader>dpr", function() require("dap-python").test_method() end)
+
+            local dap = require("dap")
+            dap.configurations.python = dap.configurations.python or {}
+
+            -- Run uvicorn
+            table.insert(dap.configurations.python, {
+                type = "python",
+                request = "launch",
+                name = "Run Uvicorn",
+                module = "uvicorn",
+                args = { "app.main:app", "--port", "8500", "--host", "0.0.0.0" },
+                justMyCode = false,
+                console = "integratedTerminal",
+                redirectOutput = true,
+            })
+
+            -- Run Livekit Agent
+            table.insert(dap.configurations.python, {
+                type = "python",
+                request = "launch",
+                name = "Run Livekit Agent",
+                module = "agent",
+                args = { "start" },
+                justMyCode = false,
+                console = "integratedTerminal",
+                redirectOutput = true,
+            })
+
         end,
     },
 
