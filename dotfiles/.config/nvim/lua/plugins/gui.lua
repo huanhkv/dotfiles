@@ -1,6 +1,11 @@
 -- GUI plugins
 return {
 
+    {
+        "nvim-treesitter/nvim-treesitter-context",
+        config = true,
+    },
+
     -- Buffer line
     {
         'akinsho/bufferline.nvim',
