@@ -44,7 +44,7 @@ echo "Backup folder: $backup_folder"
 
 echo "============================== BASE TOOLS =============================="
 
-sudo apt -y install curl git fonts-powerline tree htop
+sudo apt -y install curl git fonts-powerline tree htop bat exa tldr ripgrep fd dust ncdu navi
 sudo apt install -y ibus-unikey
 
 # echo "================================ SHELL ================================="
