@@ -10,11 +10,20 @@ alias kw1="ssh huanhkv@localhost -p "$k8s_worker_1_port
 
 # Brew mapping =================================================================================
 export PATH=/opt/homebrew/bin:$PATH
+export DYLD_LIBRARY_PATH="/opt/homebrew/lib:$DYLD_LIBRARY_PATH"
 
 # Tool mapping =================================================================================
+# # Vim
+alias v="vim"
 alias nv="nvim"
+alias vim="nvim"
+
 alias cat="bat"
-alias ls="exa"
+alias ls="eza"
+
+# Git =================================================================================
+alias githuan='GIT_SSH_COMMAND="ssh -o IdentitiesOnly=yes -o IdentityFile=~/.ssh/id_ed25519_huanhkv" git'
+alias git-set-huanhkv='git config --local user.name "Winter HoKha" && git config --local user.email "huanhkv@gmail.com" && git config --local user.signingkey "/Users/huan.ho/.ssh/id_ed25519_huanhkv.pub"'
 
 # Colima =================================================================================
 c="colima"
@@ -26,7 +35,7 @@ alias m=$m
 alias mi="$m image"
 
 # Kubectl =================================================================================
-
+# # CLI
 k="kubectl"
 c=" config"
 d=" describe"
@@ -34,13 +43,6 @@ l=" logs"
 g=" get"
 p=" pod"
 u=" use-context"
-# # Cluster
-qa=""
-stage=""
-prod=""
-vpstage=""
-vpprod=""
-
 alias k=$k
 
 alias kg=$k$g
@@ -53,37 +55,14 @@ alias kgp=$k$g$p
 alias kdp=$k$d$p
 alias kcgc=$k$c" get-contexts"
 
-alias kuqa=$k$c$u$qa
-alias kustage=$k$c$u$stage
-alias kuprod=$k$c$u$prod
-alias kuvpstage=$k$c$u$vpstage
-alias kuvpprod=$k$c$u$vpprod
-
-# Workbench
-sc_ip=""
-lp_ip=""
-l4_0_ip=""
-l4_1_ip=""
-red_ip=""
-
-## sc
-alias sc="ssh jupyter@"$sc_ip
-
-## lp
-alias lp="ssh jupyter@"$lp_ip
-alias lp-huanhkv="ssh huanhkv@"$lp_ip
-
-## L4
-alias l40="ssh jupyter@"$l4_0_ip
-alias l40-huanhkv="ssh huanhkv@"$l4_0_ip
-
-## L4-1
-alias l41="ssh jupyter@"$l4_1_ip
-alias l41-huanhkv="ssh huanhkv@"$l4_1_ip
-
-alias red="ssh jupyter@"$red_ip
-alias red-huanhkv="ssh huanhkv@"$red_ip
-
-
 # Gcloud =================================================================================
 alias gal="gcloud auth login"
+
+# Other aliases =================================================================================
+# # K8s Cluster
+qa=""
+stage=""
+prod=""
+prod_csa=""
+vpstage=""
+vpprod=""
