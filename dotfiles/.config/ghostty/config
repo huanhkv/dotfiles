@@ -7,7 +7,7 @@ font-size = 10
 
 # Background
 background-image = "../backgrounds/ANIME-PICTURES.NET_-_760905-2560x1440-hamidashi+creative-nishiki+asumi-utsunomiya+tsumire-single-looking+at+viewer-blush.png"
-background-image-opacity = 0.3
+background-image-opacity = 0.1
 background-image-fit = cover
 background-opacity = 1
 background-blur = 10

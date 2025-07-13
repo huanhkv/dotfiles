@@ -215,15 +215,16 @@ echo "============================= OTHER TOOLs =============================="
 echo "Install Window manager tools"
 # Install
 brew install --cask nikitabobko/tap/aerospace
-brew tap FelixKratz/formulae
-brew install sketchybar
+curl -L https://raw.githubusercontent.com/FelixKratz/dotfiles/master/install_sketchybar.sh | sh
 brew install borders
 
 # Backup
 backup_path "$HOME/.aerospace.toml" "$backup_folder"
+backup_path "$HOME/.config/borders" "$backup_folder"
 
 # Add config
 ln -s "$(realpath dotfiles/.aerospace.toml)" "$HOME"
+ln -s "$(realpath dotfiles/.config/borders)" "$HOME/.config/borders"
 
 
 # # Docker

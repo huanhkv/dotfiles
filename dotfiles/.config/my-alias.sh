@@ -8,9 +8,17 @@ k8s_worker_1_port="111"
 alias km1="ssh huanhkv@localhost -p "$k8s_master_1_port
 alias kw1="ssh huanhkv@localhost -p "$k8s_worker_1_port
 
-# Brew mapping =================================================================================
+
+export PATH=/opt/homebrew/bin:$PATH
+
+# MacOS specific settings =================================================================================
+# # Brew mapping =================================================================================
 export PATH=/opt/homebrew/bin:$PATH
 export DYLD_LIBRARY_PATH="/opt/homebrew/lib:$DYLD_LIBRARY_PATH"
+
+# # CMake mapping =================================================================================
+export PATH=/Applications/CMake.app/Contents/bin:$PATH
+
 
 # Tool mapping =================================================================================
 # # Vim
