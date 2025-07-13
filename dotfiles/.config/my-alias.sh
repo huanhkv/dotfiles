@@ -32,6 +32,7 @@ alias ls="eza"
 # Git =================================================================================
 alias githuan='GIT_SSH_COMMAND="ssh -o IdentitiesOnly=yes -o IdentityFile=~/.ssh/id_ed25519_huanhkv" git'
 alias git-set-huanhkv='git config --local user.name "Winter HoKha" && git config --local user.email "huanhkv@gmail.com" && git config --local user.signingkey "/Users/huan.ho/.ssh/id_ed25519_huanhkv.pub"'
+alias lzg=lazygit
 
 # Colima =================================================================================
 c="colima"
@@ -65,6 +66,7 @@ alias kcgc=$k$c" get-contexts"
 
 # Gcloud =================================================================================
 alias gal="gcloud auth login"
+alias gal-ad="gcloud auth application-default login"
 
 # Other aliases =================================================================================
 # # K8s Cluster

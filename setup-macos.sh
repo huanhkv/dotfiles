@@ -224,6 +224,8 @@ backup_path "$HOME/.config/borders" "$backup_folder"
 
 # Add config
 ln -s "$(realpath dotfiles/.aerospace.toml)" "$HOME"
+rm -rf "$HOME/.config/sketchybar"
+ln -s "$(realpath dotfiles/.config/sketchybar)" "$HOME/.config/sketchybar"
 ln -s "$(realpath dotfiles/.config/borders)" "$HOME/.config/borders"
 
 
