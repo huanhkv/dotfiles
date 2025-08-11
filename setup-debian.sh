@@ -44,9 +44,13 @@ echo "Backup folder: $backup_folder"
 
 echo "============================== BASE TOOLS =============================="
 
-sudo apt -y install curl git fonts-powerline tree htop bat exa tldr ripgrep fd dust ncdu navi
+sudo apt -y install curl git fonts-powerline tree htop tldr ripgrep fd dust ncdu navi
 sudo apt install -y ibus-unikey
 # sudo apt install -y ibus-unikey
+
+curl https://sh.rustup.rs -sSf | sh
+cargo install eza
+cargo install --locked bat
 
 echo "================================ SHELL ================================="
 
@@ -92,7 +96,8 @@ elif [ "$shell" -eq 2 ]; then
     echo "Backup Bash config"
     backup_path "$HOME/.bashrc" "$backup_folder"
 
-    # Add plugins
+    # Install Oh My Bash
+	bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 
     # Add alias
     echo "source $HOME/.config/my-alias.sh" >> "$HOME/.bashrc"
