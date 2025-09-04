@@ -21,6 +21,31 @@ export PATH=/Applications/CMake.app/Contents/bin:$PATH
 
 
 # Tool mapping =================================================================================
+# # UV
+uv_env_path="$HOME/.uv-env"
+if [ ! -d "$uv_env_path" ]; then
+    echo "Creating virtual environment at $uv_env_path"
+    mkdir "$uv_env_path"
+fi
+alias uv_env_list="ls -lah $uv_env_path"
+uv_env_create() {
+    current_dir=$(pwd)
+
+    mkcd "$uv_env_path/$1"
+
+    # Get all args except the first one
+    uv_args=()
+    for arg in "$@"; do
+        uv_args+=("$arg")
+    done
+    uv venv "${uv_args[@]:1}"
+
+    cd "$current_dir" || return
+}
+uv_env_activate() {
+    source $uv_env_path/$1/.venv/bin/activate
+}
+
 # # Vim
 alias v="vim"
 alias nv="nvim"
