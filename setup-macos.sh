@@ -83,6 +83,62 @@ backup_path "$HOME/.config/$terminal_lower" "$backup_folder"
 echo "Copy $terminal config from $(realpath "dotfiles/.config/$terminal_lower") to $HOME/.config/$terminal_lower"
 ln -s "$(realpath "dotfiles/.config/$terminal_lower")" "$HOME/.config/$terminal_lower"
 
+echo "================================= Shell ================================="
+
+# Get Alias
+backup_path "$HOME/.config/my-alias.sh" "$backup_folder"
+ln -s "$(realpath dotfiles/.config/my-alias.sh)" "$HOME/.config/my-alias.sh"
+
+# Select shell
+echo "Sellect Shell:"
+printf "\t1. Zsh\n"
+printf "\t2. Bash\n"
+printf "\t3. Fish\n"
+
+printf "Enter your choice: "
+read -r shell
+
+while [ ! "$shell" -eq 1 ] && [ ! "$shell" -eq 2 ] && [ ! "$shell" -eq 3 ]; do
+    echo "Invalid choice!"
+    printf "Enter your choice again: "
+    read -r shell
+done
+
+# Install shell
+if [ "$shell" -eq 1 ]; then
+    echo "Install ZSH"
+    # brew install zsh
+
+    # Backup ZSH config
+    echo "Backup ZSH config"
+    backup_path "$HOME/.zshrc" "$backup_folder"
+
+    # Install Oh My Zsh
+    
+    # Add alias
+    echo "source $HOME/.config/my-alias.sh" >> "$HOME/.zshrc"
+
+elif [ "$shell" -eq 2 ]; then
+    echo "Install Bash"
+
+    # Backup Bash config
+    echo "Backup Bash config"
+    backup_path "$HOME/.bashrc" "$backup_folder"
+
+    # Add plugins
+
+    # Add alias
+    echo "source $HOME/.config/my-alias.sh" >> "$HOME/.bashrc"
+
+else
+    echo "Install Fish shell"
+
+    # Add alias
+fi
+
+# alias
+
+
 echo "================================= TMUX ================================="
 # # Install TMUX
 # brew install tmux
@@ -159,15 +215,18 @@ echo "============================= OTHER TOOLs =============================="
 echo "Install Window manager tools"
 # Install
 brew install --cask nikitabobko/tap/aerospace
-brew tap FelixKratz/formulae
-brew install sketchybar
+curl -L https://raw.githubusercontent.com/FelixKratz/dotfiles/master/install_sketchybar.sh | sh
 brew install borders
 
 # Backup
 backup_path "$HOME/.aerospace.toml" "$backup_folder"
+backup_path "$HOME/.config/borders" "$backup_folder"
 
 # Add config
 ln -s "$(realpath dotfiles/.aerospace.toml)" "$HOME"
+rm -rf "$HOME/.config/sketchybar"
+ln -s "$(realpath dotfiles/.config/sketchybar)" "$HOME/.config/sketchybar"
+ln -s "$(realpath dotfiles/.config/borders)" "$HOME/.config/borders"
 
 
 # # Docker

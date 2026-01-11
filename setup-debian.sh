@@ -44,31 +44,69 @@ echo "Backup folder: $backup_folder"
 
 echo "============================== BASE TOOLS =============================="
 
-sudo apt -y install curl git fonts-powerline tree htop
+sudo apt -y install curl git fonts-powerline tree htop tldr ripgrep fd dust ncdu navi
 sudo apt install -y ibus-unikey
+# sudo apt install -y ibus-unikey
 
-# echo "================================ SHELL ================================="
-# sudo apt -y install zsh
-# echo $(zsh --version)
-# 
-# # Check default shell
-# if [ ! "$SHELL" = *"zsh"* ];
-# then
-#     echo "$SHELL is default shell. Set zsh is default shell..."
-#     chsh -s $(which zsh)
-#     echo "Now $SHELL is default shell."
-# else
-#     echo "Zsh is default shell"
-# fi
-# 
-# # Oh my ZSH
-# OH_MY_ZSH_DIR="$HOME/.oh-my-zsh"
-# if [ -d "$OH_MY_ZSH_DIR" ]; 
-# then
-#     echo "$OH_MY_ZSH_DIR is existed. You'll need to remove it if you want to reinstall oh-my-zsh."
-# else
-#     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-# fi
+curl https://sh.rustup.rs -sSf | sh
+cargo install eza
+cargo install --locked bat
+
+echo "================================ SHELL ================================="
+
+# Get Alias
+backup_path "$HOME/.config/my-alias.sh" "$backup_folder"
+ln -s "$(realpath dotfiles/.config/my-alias.sh)" "$HOME/.config/my-alias.sh"
+
+# Select shell
+echo "Sellect Shell:"
+printf "\t1. Zsh\n"
+printf "\t2. Bash\n"
+printf "\t3. Fish\n"
+
+printf "Enter your choice: "
+read -r shell
+
+while [ ! "$shell" -eq 1 ] && [ ! "$shell" -eq 2 ] && [ ! "$shell" -eq 3 ]; do
+    echo "Invalid choice!"
+    printf "Enter your choice again: "
+    read -r shell
+done
+
+# Install shell
+if [ "$shell" -eq 1 ]; then
+    echo "Install ZSH"
+    # sudo apt -y install zsh
+    # echo $(zsh --version)
+
+
+    # Backup ZSH config
+    echo "Backup ZSH config"
+    backup_path "$HOME/.zshrc" "$backup_folder"
+
+    # Install Oh My Zsh
+    
+    # Add alias
+    echo "source $HOME/.config/my-alias.sh" >> "$HOME/.zshrc"
+
+elif [ "$shell" -eq 2 ]; then
+    echo "Install Bash"
+
+    # Backup Bash config
+    echo "Backup Bash config"
+    backup_path "$HOME/.bashrc" "$backup_folder"
+
+    # Install Oh My Bash
+	bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+
+    # Add alias
+    echo "source $HOME/.config/my-alias.sh" >> "$HOME/.bashrc"
+
+else
+    echo "Install Fish shell"
+
+    # Add alias
+fi
 
 echo "================================= TMUX ================================="
 # Install TMUX
