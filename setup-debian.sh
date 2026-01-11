@@ -19,7 +19,7 @@ backup_path() {
         if [ -L "$src" ]; then
             echo "$src is a symlink"
             sudo ln -s "$(readlink "$src")" "$dest"
-	    sudo rm -rf "$src"
+            sudo rm -rf "$src"
         else
             echo "$src is NOT a symlink"
             sudo mv "$src" "$dest"
@@ -41,22 +41,25 @@ fi
 backup_folder=$(realpath "$backup_folder")
 echo "Backup folder: $backup_folder"
 
+# Config folder
+if [ ! -d "$HOME/.config" ]; then
+    echo "$HOME/.config does not exist! Create it!"
+    mkdir -p "$HOME/.config"
+fi
 
 echo "============================== BASE TOOLS =============================="
 
-sudo apt -y install curl git fonts-powerline tree htop tldr ripgrep fd dust ncdu navi
-sudo apt install -y ibus-unikey
-# sudo apt install -y ibus-unikey
+sudo apt -y install wget curl git fonts-powerline tree htop tldr ripgrep ncdu build-essential strace ibus-unikey xclip
 
-curl https://sh.rustup.rs -sSf | sh
-cargo install eza
-cargo install --locked bat
+# curl https://sh.rustup.rs -sSf | sh
+export PATH=$PATH:$HOME/.cargo/bin
+cargo install eza fd-find
+cargo install --locked bat navi
 
 echo "================================ SHELL ================================="
 
 # Get Alias
 backup_path "$HOME/.config/my-alias.sh" "$backup_folder"
-ln -s "$(realpath dotfiles/.config/my-alias.sh)" "$HOME/.config/my-alias.sh"
 
 # Select shell
 echo "Sellect Shell:"
@@ -85,9 +88,9 @@ if [ "$shell" -eq 1 ]; then
     backup_path "$HOME/.zshrc" "$backup_folder"
 
     # Install Oh My Zsh
-    
+
     # Add alias
-    echo "source $HOME/.config/my-alias.sh" >> "$HOME/.zshrc"
+    echo "source $(realpath dotfiles/.config/my-alias.sh)" >> "$HOME/.zshrc"
 
 elif [ "$shell" -eq 2 ]; then
     echo "Install Bash"
@@ -97,10 +100,10 @@ elif [ "$shell" -eq 2 ]; then
     backup_path "$HOME/.bashrc" "$backup_folder"
 
     # Install Oh My Bash
-	bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+        bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 
     # Add alias
-    echo "source $HOME/.config/my-alias.sh" >> "$HOME/.bashrc"
+    echo "source $(realpath dotfiles/.config/my-alias.sh)" >> "$HOME/.bashrc"
 
 else
     echo "Install Fish shell"
@@ -131,8 +134,6 @@ echo "Install TMUX plugins"
 
 echo "================================= VIM =================================="
 # Install Vim
-sudo apt install -y xclip
-
 echo "Sellect editor:"
 printf "\t1. Vim\n"
 printf "\t2. Neovim\n"
@@ -170,7 +171,11 @@ if [ "$editor" -eq 1 ]; then
 else
 
     echo "Install Neovim"
-    # sudo apt install -y neovim
+    cd ..
+    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+    sudo tar -xzf nvim-linux-x86_64.tar.gz
+    echo "alias nvim='$(realpath nvim-linux-x86_64)/bin/nvim'" >> dotfiles/dotfiles/.config/my-alias.sh
+    cd dotfiles
 
     # Backup NeoVim config
     echo "Backup NeoVim config"
@@ -197,7 +202,7 @@ echo "============================= OTHER TOOLs =============================="
 # sudo apt install -y docker.io
 # sudo systemctl enable docker --now
 # sudo groupadd docker
-# sudo usermod -aG docker $USER	
+# sudo usermod -aG docker $USER
 # newgrp docker
 # docker ps
 
