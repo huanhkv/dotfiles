@@ -30,6 +30,20 @@ backup_path() {
     fi
 }
 
+ensure_file() {
+    file="$1"
+    if [ ! -f "$file" ]; then
+        echo "Creating $file"
+        touch "$file"
+    fi
+}
+
+append_once() {
+    line="$1"
+    file="$2"
+    grep -qxF "$line" "$file" || echo "$line" >> "$file"
+}
+
 # Backup folder
 backup_folder=$HOME/dotfiles-bak
 
@@ -66,6 +80,7 @@ echo "Sellect Shell:"
 printf "\t1. Zsh\n"
 printf "\t2. Bash\n"
 printf "\t3. Fish\n"
+printf "\t4. Skip\n"
 
 printf "Enter your choice: "
 read -r shell
@@ -76,39 +91,68 @@ while [ ! "$shell" -eq 1 ] && [ ! "$shell" -eq 2 ] && [ ! "$shell" -eq 3 ]; do
     read -r shell
 done
 
-# Install shell
+ALIAS_LINE="source $(realpath dotfiles/.config/my-alias.sh)"
+ZSHRC="$HOME/.zshrc"
+BASH_FILE="$HOME/.bashrc"
+FISH_CONFIG="$HOME/.config/fish/config.fish"
+
+# ---------------- ZSH ----------------
 if [ "$shell" -eq 1 ]; then
-    echo "Install ZSH"
-    # sudo apt -y install zsh
-    # echo $(zsh --version)
+    echo "Setup Zsh"
 
+    if ! command -v zsh >/dev/null 2>&1; then
+        echo "Installing Zsh..."
+        sudo apt update && sudo apt -y install zsh
+    fi
+    echo "Zsh version: $(zsh --version)"
 
-    # Backup ZSH config
-    echo "Backup ZSH config"
-    backup_path "$HOME/.zshrc" "$backup_folder"
+    backup_path "$ZSHRC" "$backup_folder"
+    ensure_file "$ZSHRC"
 
     # Install Oh My Zsh
+    # ...
 
-    # Add alias
-    echo "source $(realpath dotfiles/.config/my-alias.sh)" >> "$HOME/.zshrc"
+    echo "Adding aliases to .zshrc"
+    append_once "$ALIAS_LINE" "$ZSHRC"
 
+# ---------------- BASH ----------------
 elif [ "$shell" -eq 2 ]; then
-    echo "Install Bash"
+    echo "Setup Bash"
 
-    # Backup Bash config
-    echo "Backup Bash config"
-    backup_path "$HOME/.bashrc" "$backup_folder"
+    backup_path "$BASH_FILE" "$backup_folder"
+    ensure_file "$BASH_FILE"
 
     # Install Oh My Bash
+    if [ ! -d "$HOME/.oh-my-bash" ]; then
+        echo "Installing Oh My Bash"
         bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+    else
+        echo "✅ Oh My Bash already installed, skipping"
+    fi
 
-    # Add alias
-    echo "source $(realpath dotfiles/.config/my-alias.sh)" >> "$HOME/.bashrc"
+    echo "Adding aliases to $BASH_FILE"
+    append_once "$ALIAS_LINE" "$BASH_FILE"
 
+# ---------------- FISH ----------------
+elif [ "$shell" -eq 3 ]; then
+    echo "Setup Fish"
+
+    if ! command -v fish >/dev/null 2>&1; then
+        echo "Installing Fish..."
+        sudo apt update && sudo apt install -y fish
+    fi
+
+    mkdir -p "$(dirname "$FISH_CONFIG")"
+
+    backup_path "$FISH_CONFIG" "$backup_folder"
+    ensure_file "$FISH_CONFIG"
+
+    echo "Adding aliases to Fish config"
+    append_once "$ALIAS_LINE" "$FISH_CONFIG"
+
+# ---------------- SKIP ----------------
 else
-    echo "Install Fish shell"
-
-    # Add alias
+    echo "Skip SHELL setup"
 fi
 
 echo "================================= TMUX ================================="
@@ -174,7 +218,7 @@ else
     cd ..
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
     sudo tar -xzf nvim-linux-x86_64.tar.gz
-    echo "alias nvim='$(realpath nvim-linux-x86_64)/bin/nvim'" >> dotfiles/dotfiles/.config/my-alias.sh
+    append_once "alias nvim='$(realpath nvim-linux-x86_64)/bin/nvim'" "dotfiles/dotfiles/.config/my-alias.sh"
     cd dotfiles
 
     # Backup NeoVim config
@@ -189,14 +233,14 @@ fi
 echo "============================= OTHER TOOLs =============================="
 
 # Install Network tools
-# sudo apt install -y iputils-ping net-tools traceroute telnet
+sudo apt install -y iputils-ping net-tools traceroute telnet
 
-# # Install lazygit: https://github.com/jesseduffield/lazygit
-# LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-# curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-# tar xf lazygit.tar.gz lazygit
-# rm lazygit.tar.gz
-# sudo install lazygit /usr/local/bin
+# Install lazygit: https://github.com/jesseduffield/lazygit
+LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+tar xf lazygit.tar.gz lazygit
+rm lazygit.tar.gz
+sudo install lazygit /usr/local/bin
 
 # # Docker
 # sudo apt install -y docker.io
