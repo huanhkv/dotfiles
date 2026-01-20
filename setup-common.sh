@@ -52,7 +52,7 @@ fi
 setup_rust() {
     echo "================================ RUST ================================="
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    cargo install --locked bat navi eza fd-find tlrc
+    cargo install --locked bat navi eza fd-find tlrc zoxide
 }
 
 # ---- Shell ----

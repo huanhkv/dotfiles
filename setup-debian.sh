@@ -14,6 +14,20 @@ install_neovim() {
     echo "alias nvim='/opt/nvim-linux-x86_64/bin/nvim'" >> "$SCRIPT_DIR/dotfiles/.config/my-alias.sh"
 }
 
+ensure_file() {
+    file="$1"
+    if [ ! -f "$file" ]; then
+        echo "Creating $file"
+        touch "$file"
+    fi
+}
+
+append_once() {
+    line="$1"
+    file="$2"
+    grep -qxF "$line" "$file" || echo "$line" >> "$file"
+}
+
 # ---- Debian-specific setup ----
 echo "============================== BASE TOOLS =============================="
 
