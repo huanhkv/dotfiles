@@ -65,10 +65,10 @@ echo "============================== BASE TOOLS =============================="
 
 sudo apt -y install wget curl git fonts-powerline tree htop tldr ripgrep ncdu build-essential strace ibus-unikey xclip
 
-# curl https://sh.rustup.rs -sSf | sh
+curl https://sh.rustup.rs -sSf | sh
 export PATH=$PATH:$HOME/.cargo/bin
 cargo install eza fd-find
-cargo install --locked bat navi
+cargo install --locked bat navi uv zoxide
 
 echo "================================ SHELL ================================="
 
