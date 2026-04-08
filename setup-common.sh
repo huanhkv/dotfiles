@@ -68,11 +68,12 @@ setup_shell() {
     printf "\t1. Zsh\n"
     printf "\t2. Bash\n"
     printf "\t3. Fish\n"
+    printf "\t4. Skip\n"
 
     printf "Enter your choice: "
     read -r shell
 
-    while [ "$shell" != "1" ] && [ "$shell" != "2" ] && [ "$shell" != "3" ]; do
+    while [ "$shell" != "1" ] && [ "$shell" != "2" ] && [ "$shell" != "3" ] && [ "$shell" != "4" ]; do
         echo "Invalid choice!"
         printf "Enter your choice again: "
         read -r shell
@@ -101,10 +102,12 @@ setup_shell() {
 
         echo "source $HOME/.config/my-alias.sh" >> "$HOME/.bashrc"
 
-    else
+    elif [ "$shell" = "2" ]; then
         echo "Install Fish shell"
 
         # Add alias
+    else
+        echo "Skip setup shell"
     fi
 }
 
@@ -134,11 +137,12 @@ setup_editor() {
     echo "Select editor:"
     printf "\t1. Vim\n"
     printf "\t2. Neovim\n"
+    printf "\t3. Skip\n"
 
     printf "Enter your choice: "
     read -r editor
 
-    while [ "$editor" != "1" ] && [ "$editor" != "2" ]; do
+    while [ "$editor" != "1" ] && [ "$editor" != "2" ] && [ "$editor" != "3" ]; do
         echo "Invalid choice!"
         printf "Enter your choice again: "
         read -r editor
@@ -161,7 +165,7 @@ setup_editor() {
         ln -s "$SCRIPT_DIR/dotfiles/.vim" "$HOME/.vim"
         vim +PlugInstall +qall
 
-    else
+    elif [ "$editor" = "2" ]; then
         echo "Install Neovim"
         install_neovim
 
@@ -170,5 +174,7 @@ setup_editor() {
 
         echo "Copy nvim config from $SCRIPT_DIR/dotfiles/.config/nvim to $HOME/.config/nvim"
         ln -s "$SCRIPT_DIR/dotfiles/.config/nvim" "$HOME/.config/nvim"
+    else
+        echo "Skip install and setup editor"
     fi
 }

@@ -25,11 +25,12 @@ echo "================================= Terminal ===============================
 echo "Select Terminal:"
 printf "\t1. WezTerm\n"
 printf "\t2. Ghostty\n"
+printf "\t3. Skip\n"
 
 printf "Enter your choice: "
 read -r terminal
 
-while [ "$terminal" != "1" ] && [ "$terminal" != "2" ]; do
+while [ "$terminal" != "1" ] && [ "$terminal" != "2" ] && [ "$terminal" != "3" ]; do
     echo "Invalid choice!"
     printf "Enter your choice again: "
     read -r terminal
@@ -42,13 +43,18 @@ elif [ "$terminal" = "2" ]; then
     echo "Install Ghostty"
     terminal="Ghostty"
 fi
-terminal_lower=$(echo "$terminal" | tr '[:upper:]' '[:lower:]')
 
-echo "Backup $terminal config"
-backup_path "$HOME/.config/$terminal_lower" "$backup_folder"
+if [ "$terminal" != "3" ]; then
+    terminal_lower=$(echo "$terminal" | tr '[:upper:]' '[:lower:]')
 
-echo "Copy $terminal config from $SCRIPT_DIR/dotfiles/.config/$terminal_lower to $HOME/.config/$terminal_lower"
-ln -s "$SCRIPT_DIR/dotfiles/.config/$terminal_lower" "$HOME/.config/$terminal_lower"
+    echo "Backup $terminal config"
+    backup_path "$HOME/.config/$terminal_lower" "$backup_folder"
+
+    echo "Copy $terminal config from $SCRIPT_DIR/dotfiles/.config/$terminal_lower to $HOME/.config/$terminal_lower"
+    ln -s "$SCRIPT_DIR/dotfiles/.config/$terminal_lower" "$HOME/.config/$terminal_lower"
+else
+    echo "Skip install terminal"
+fi
 
 setup_rust
 setup_shell
