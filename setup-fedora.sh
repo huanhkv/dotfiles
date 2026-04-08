@@ -49,7 +49,7 @@ fi
 
 echo "============================== BASE TOOLS =============================="
 
-sudo apt -y install wget curl git fonts-powerline tree htop tldr ripgrep ncdu build-essential strace ibus-unikey xclip
+sudo dnf -y install wget curl git powerline-fonts tree htop tldr ripgrep ncdu gcc gcc-c++ make strace ibus-unikey xclip
 
 # Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -81,7 +81,7 @@ done
 # Install shell
 if [ "$shell" -eq 1 ]; then
     echo "Install ZSH"
-    sudo apt -y install zsh
+    sudo dnf -y install zsh
     echo $(zsh --version)
 
     # Backup ZSH config
@@ -114,7 +114,7 @@ fi
 
 echo "================================= TMUX ================================="
 # Install TMUX
-sudo apt install -y tmux
+sudo dnf install -y tmux
 
 # Backup TMUX config
 echo "Backup TMUX config"
@@ -151,7 +151,7 @@ done
 if [ "$editor" -eq 1 ]; then
 
     echo "Install Vim"
-    sudo apt install -y vim
+    sudo dnf install -y vim-enhanced
 
     # Backup Vim config
     echo "Backup Vim config"
@@ -172,11 +172,7 @@ if [ "$editor" -eq 1 ]; then
 else
 
     echo "Install Neovim"
-    cd ..
-    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-    sudo tar -xzf nvim-linux-x86_64.tar.gz
-    echo "alias nvim='$(realpath nvim-linux-x86_64)/bin/nvim'" >> dotfiles/.config/my-alias.sh
-    cd dotfiles
+    sudo dnf install -y neovim
 
     # Backup NeoVim config
     echo "Backup NeoVim config"
@@ -190,17 +186,16 @@ fi
 echo "============================= OTHER TOOLs =============================="
 
 # Install Network tools
-# sudo apt install -y iputils-ping net-tools traceroute telnet
+# sudo dnf install -y iputils net-tools traceroute telnet
 
 # # Install lazygit: https://github.com/jesseduffield/lazygit
-# LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-# curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-# tar xf lazygit.tar.gz lazygit
-# rm lazygit.tar.gz
-# sudo install lazygit /usr/local/bin
+# sudo dnf copr enable atim/lazygit -y
+# sudo dnf install -y lazygit
 
 # # Docker
-# sudo apt install -y docker.io
+# sudo dnf install -y dnf-plugins-core
+# sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+# sudo dnf install -y docker-ce docker-ce-cli containerd.io
 # sudo systemctl enable docker --now
 # sudo groupadd docker
 # sudo usermod -aG docker $USER

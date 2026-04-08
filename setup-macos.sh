@@ -41,18 +41,23 @@ fi
 backup_folder=$(realpath "$backup_folder")
 echo "Backup folder: $backup_folder"
 
+# Config folder
+if [ ! -d "$HOME/.config" ]; then
+    echo "$HOME/.config does not exist! Create it!"
+    mkdir -p "$HOME/.config"
+fi
 
-# echo "================================= Brew ================================="
-# 
-# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-# export PATH=/opt/homebrew/bin:$PATH
-# 
-# echo "================================= Base Tools ================================="
-# 
-# brew install git curl tree htop
-#
+echo "================================= Brew ================================="
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+export PATH=/opt/homebrew/bin:$PATH
+
+echo "============================== BASE TOOLS =============================="
+
+brew install git curl tree htop
+
 echo "================================= Terminal ================================="
-echo "Sellect Terminal:"
+echo "Select Terminal:"
 printf "\t1. WezTerm\n"
 printf "\t2. Ghostty\n"
 
@@ -83,14 +88,20 @@ backup_path "$HOME/.config/$terminal_lower" "$backup_folder"
 echo "Copy $terminal config from $(realpath "dotfiles/.config/$terminal_lower") to $HOME/.config/$terminal_lower"
 ln -s "$(realpath "dotfiles/.config/$terminal_lower")" "$HOME/.config/$terminal_lower"
 
-echo "================================= Shell ================================="
+# Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+export PATH=$PATH:$HOME/.cargo/bin
+cargo install eza fd-find
+cargo install --locked bat navi
+
+echo "================================ SHELL ================================="
 
 # Get Alias
 backup_path "$HOME/.config/my-alias.sh" "$backup_folder"
 ln -s "$(realpath dotfiles/.config/my-alias.sh)" "$HOME/.config/my-alias.sh"
 
 # Select shell
-echo "Sellect Shell:"
+echo "Select Shell:"
 printf "\t1. Zsh\n"
 printf "\t2. Bash\n"
 printf "\t3. Fish\n"
@@ -107,14 +118,15 @@ done
 # Install shell
 if [ "$shell" -eq 1 ]; then
     echo "Install ZSH"
-    # brew install zsh
+    brew install zsh
+    echo $(zsh --version)
 
     # Backup ZSH config
     echo "Backup ZSH config"
     backup_path "$HOME/.zshrc" "$backup_folder"
 
     # Install Oh My Zsh
-    
+
     # Add alias
     echo "source $HOME/.config/my-alias.sh" >> "$HOME/.zshrc"
 
@@ -125,7 +137,8 @@ elif [ "$shell" -eq 2 ]; then
     echo "Backup Bash config"
     backup_path "$HOME/.bashrc" "$backup_folder"
 
-    # Add plugins
+    # Install Oh My Bash
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 
     # Add alias
     echo "source $HOME/.config/my-alias.sh" >> "$HOME/.bashrc"
@@ -136,20 +149,17 @@ else
     # Add alias
 fi
 
-# alias
-
-
 echo "================================= TMUX ================================="
-# # Install TMUX
-# brew install tmux
+# Install TMUX
+brew install tmux
 
 # Backup TMUX config
 echo "Backup TMUX config"
 backup_path "$HOME/.tmux" "$backup_folder"
 backup_path "$HOME/.tmux.conf" "$backup_folder"
 
-# Install TMUX Pluggin Manager
-echo "Install TMUX Pluggin Manager (TPM)"
+# Install TMUX Plugin Manager
+echo "Install TMUX Plugin Manager (TPM)"
 git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
 
 # Add plugins
@@ -161,9 +171,10 @@ echo "Install TMUX plugins"
 "$HOME/.tmux/plugins/tpm/bin/install_plugins"
 
 echo "================================= VIM =================================="
-echo "Sellect editor:"
+# Install Vim
+echo "Select editor:"
 printf "\t1. Vim\n"
-printf "\t2. Neovim"
+printf "\t2. Neovim\n"
 
 printf "Enter your choice: "
 read -r editor
@@ -177,18 +188,18 @@ done
 if [ "$editor" -eq 1 ]; then
 
     echo "Install Vim"
-    # brew install vim
+    brew install vim
 
     # Backup Vim config
     echo "Backup Vim config"
     backup_path "$HOME/.vim" "$backup_folder"
     backup_path "$HOME/.vimrc" "$backup_folder"
-    
+
     # Install Vim-Plug
     echo "Install Vim-Plug"
     sh -c 'curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-    
+
     # Add plugins
     echo "Copy vim config to $HOME"
     ln -s "dotfiles/.vimrc" "$HOME"
@@ -198,16 +209,15 @@ if [ "$editor" -eq 1 ]; then
 else
 
     echo "Install Neovim"
-    # brew install neovim
+    brew install neovim
 
     # Backup NeoVim config
     echo "Backup NeoVim config"
     backup_path "$HOME/.config/nvim" "$backup_folder"
-    
+
     # Add plugins
     echo "Copy vim config from $(realpath dotfiles/.config/nvim) to $HOME"
     ln -s "$(realpath dotfiles/.config/nvim)" "$HOME/.config/nvim"
-
 fi
 
 echo "============================= OTHER TOOLs =============================="
