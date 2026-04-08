@@ -1,4 +1,8 @@
 # CONSTANTS
+# # K8s Cluster
+dev=""
+stg=""
+prd=""
 
 # CONSTANTS END =================================================================================
 
@@ -102,8 +106,8 @@ kbu() {
   else
     echo "Usage: ku <context> [namespace]"
     echo "Examples:"
-    echo "  ku qa          # switch to qa context"
-    echo "  ku qa dsai     # switch to qa context with dsai namespace"
+    echo "  ku dev          # switch to dev context"
+    echo "  ku dev dsai     # switch to dev context with dsai namespace"
   fi
 }
 
