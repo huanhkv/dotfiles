@@ -84,5 +84,12 @@ require("maps")
 -- Colorschema
 vim.opt.background = "dark"
 vim.cmd([[colorscheme gruvbox]])
--- vim.cmd([[highlight Normal ctermbg=NONE guibg=NONE]])
--- vim.cmd([[highlight NonText ctermbg=NONE guibg=NONE]])
+vim.cmd([[highlight Normal ctermbg=NONE guibg=NONE]])
+vim.cmd([[highlight NonText ctermbg=NONE guibg=NONE]])
+
+vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"}, {
+  pattern = "*.env",
+  callback = function()
+    vim.diagnostic.enable(false, { bufnr = 0 })
+  end,
+})
