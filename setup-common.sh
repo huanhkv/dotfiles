@@ -52,9 +52,7 @@ fi
 setup_rust() {
     echo "================================ RUST ================================="
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    export PATH=$PATH:$HOME/.cargo/bin
-    cargo install eza fd-find
-    cargo install --locked bat navi
+    cargo install --locked bat navi eza fd-find tlrc
 }
 
 # ---- Shell ----
