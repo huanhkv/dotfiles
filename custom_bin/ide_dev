@@ -1,0 +1,38 @@
+#!/bin/bash
+
+workspace_folder=""
+
+#j Dev session
+session_dev="dev"
+window_jupyterhub=0
+window_gitlab=1
+window_kubeflow=2
+window_clang=3
+window_k8s=4
+
+# session_dev
+tmux new-session -d -s $session_dev -c $workspace_folder
+
+# # Jupyterhub
+tmux send-keys -t $session_dev:$window_jupyterhub.0 'cd personal-projects/mlops/jupyterhub' C-m
+tmux rename-window -t $session_dev:$window_jupyterhub "jupyterhub"
+tmux split-window -v -l 30 -t $session_dev:$window_jupyterhub -c $workspace_folder"/personal-projects/mlops/jupyterhub"
+
+# # Gitlab
+tmux new-window -t $session_dev:$window_gitlab -n "Gitlab" -c $workspace_folder"/personal-projects/ops-gitlab"
+tmux split-window -v -l 30 -t $session_dev:$window_gitlab -c $workspace_folder"/personal-projects/ops-gitlab"
+
+# # Kubeflow
+tmux new-window -t $session_dev:$window_kubeflow -n "Kubeflow" -c $workspace_folder"/personal-projects/mlops/kubeflow"
+tmux split-window -v -l 30 -t $session_dev:$window_kubeflow -c $workspace_folder"/personal-projects/mlops/kubeflow"
+
+# # Clang
+tmux new-window -t $session_dev:$window_clang -n "Clang" -c $workspace_folder"/personal-projects/clang-tutorial"
+tmux split-window -v -l 30 -t $session_dev:$window_clang -c $workspace_folder"/personal-projects/clang-tutorial"
+
+# # k8s
+tmux new-window -t $session_dev:$window_k8s -n "k8s" -c $workspace_folder
+tmux split-window -v -l 30 -t $session_dev:$window_k8s -c $workspace_folder
+
+# Attach
+tmux attach -t $session_dev:$window_k8s

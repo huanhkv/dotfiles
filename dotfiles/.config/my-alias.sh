@@ -10,12 +10,9 @@ prd=""
 alias ..='cd ..'
 alias ...='cd ../..'
 
-mkcd() { mkdir -p "$1" && cd "$1"; }
-
-
 # MacOS specific settings =================================================================================
 # # Brew mapping =================================================================================
-export PATH=/opt/homebrew/bin:$PATH
+export PATH=/opt/homebrew/bin:$HOME/.cargo/bin:$PATH
 export DYLD_LIBRARY_PATH="/opt/homebrew/lib:$DYLD_LIBRARY_PATH"
 
 # # CMake mapping =================================================================================

@@ -20,11 +20,11 @@ return {
             lspconfig.bashls.setup({})
 
             vim.diagnostic.config({
-                virtual_text = true,  -- Show inline diagnostics
-                signs = true,         -- Show signs in the gutter
-                underline = true,     -- Underline the problematic code
-                update_in_insert = false, -- Avoid updates in insert mode
-                severity_sort = true, -- Sort diagnostics by severity
+                virtual_text = true,        -- Show inline diagnostics
+                signs = true,               -- Show signs in the gutter
+                underline = true,           -- Underline the problematic code
+                update_in_insert = false,   -- Avoid updates in insert mode
+                severity_sort = true,       -- Sort diagnostics by severity
             })
         end,
     },
