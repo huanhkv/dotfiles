@@ -52,7 +52,7 @@ fi
 setup_rust() {
     echo "================================ RUST ================================="
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    cargo install --locked bat navi eza fd-find tlrc
+    cargo install --locked bat navi eza fd-find tlrc zoxide
 }
 
 # ---- Shell ----
@@ -86,6 +86,7 @@ setup_shell() {
         backup_path "$HOME/.zshrc" "$backup_folder"
 
         # Install Oh My Zsh
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
         echo "source $HOME/.config/my-alias.sh" >> "$HOME/.zshrc"
 
