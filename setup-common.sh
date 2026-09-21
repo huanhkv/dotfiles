@@ -86,6 +86,7 @@ setup_shell() {
         backup_path "$HOME/.zshrc" "$backup_folder"
 
         # Install Oh My Zsh
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
         echo "source $HOME/.config/my-alias.sh" >> "$HOME/.zshrc"
 
